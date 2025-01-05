@@ -1,24 +1,27 @@
-import axios from 'axios'
-import './App.css'
-import { useState } from 'react'
+import './App.css';
+import { useState } from 'react';
 
 function App() {
-  const [image, setImage]=useState();
-  const onClickButton=()=>{
-    axios.get("https://picsum.photos/800").then((res)=>{
-      setImage(res)
-      console.log(image)
-  })
+  const [imageURL, setImageURL]=useState()
+  const [isLoading, setIsLoading]=useState(false);
+
+  const fetchRandomImage=()=>{
+    setIsLoading(true)
+    const timestamp=new Date().getTime();
+    const newImageURL=`https://picsum.photos/800?random=${timestamp}`
+    setImageURL(newImageURL)
+    setIsLoading(false)
   }
 
-  return (
+  return(
     <>
-      <button onClick={onClickButton}>ランダム</button>
+      <button onClick={fetchRandomImage}>ランダム画像表示</button>
+      {imageURL &&
       <div>
-      <img height={500} width={500} src={image} />
-      </div>
+        {isLoading ? <div>loading...</div>:<img height={300} width={300} src={imageURL}/>}
+      </div>}
     </>
   )
 }
 
-export default App
+export default App;
